@@ -41,6 +41,8 @@ app.get("/on", (req, res) => {
             client.end(); // Close the connection when published
         });
     });    
+
+    res.send("Sucesso TURMINHA!")
   });
 })
 
