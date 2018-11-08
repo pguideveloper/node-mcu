@@ -16,11 +16,11 @@ var options = {
 };
 var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options);
 client.on('connect', function() { // When connected
-  console.log('connected');
+  console.log('Connect on cloud mqtt');
   // subscribe to a topic
   client.subscribe('action', function() {
       // when a message arrives, do something with it
-      client.on('action', function(topic, message, packet) {
+      client.on('message', function(topic, message, packet) {
           console.log("Received '" + message + "' on '" + topic + "'");
       });
   });
