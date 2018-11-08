@@ -34,12 +34,28 @@ app.get("/on", (req, res) => {
 
     console.log('connected');
 
-    client.publish('message', 'IFSP teste', function() {
+    client.publish('message', 'on', function() {
       console.log("Message is published");
-      client.end(); // Close the connection when published
+      client.end() // Close the connection when published
+      res.redirect("/")
     });
-    
-    res.redirect("/")
+  });
+})
+
+
+app.get("/off", (req, res) => {
+
+  var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
+
+  client.on('connect', function() { // When connected
+
+    console.log('connected');
+
+    client.publish('message', 'off', function() {
+      console.log("Message is published");
+      client.end() // Close the connection when published
+      res.redirect("/")
+    });
   });
 })
 
