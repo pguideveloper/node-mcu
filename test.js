@@ -19,11 +19,11 @@ client.on('connect', function() { // When connected
         client.on('message', function(topic, message, packet) {
             console.log("Received '" + message + "' on '" + topic + "'");
         });
-    });
 
-    // publish a message to a topic
-    client.publish('message', 'IFSP teste', function() {
-        console.log("Message is published");
-        client.end(); // Close the connection when published
-    });
+        // publish a message to a topic
+        client.publish('message', 'IFSP teste', function() {
+            console.log("Message is published");
+            client.end(); // Close the connection when published
+        });
+    });    
 });

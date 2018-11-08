@@ -14,17 +14,6 @@ var options = {
   clean: true,
   encoding: 'utf8'
 };
-var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options);
-client.on('connect', function() { // When connected
-  console.log('Connect on cloud mqtt');
-  // subscribe to a topic
-  client.subscribe('action', function() {
-      // when a message arrives, do something with it
-      client.on('message', function(topic, message, packet) {
-          console.log("Received '" + message + "' on '" + topic + "'");
-      });
-  });
-});
 
 const port = process.env.PORT || 8080
 
@@ -36,10 +25,21 @@ app.get("/", (req, res) => {
 })
 
 app.get("/on", (req, res) => {
-  // publish a message to a topic
-  client.publish('action', 'on', function() {
-    console.log("Message is published");
-    client.end(); // Close the connection when published
+  client.on('connect', function() { // When connected
+    console.log('connected');
+    // subscribe to a topic
+    client.subscribe('message', function() {
+        // when a message arrives, do something with it
+        client.on('message', function(topic, message, packet) {
+            console.log("Received '" + message + "' on '" + topic + "'");
+        });
+
+        // publish a message to a topic
+        client.publish('message', 'IFSP teste', function() {
+            console.log("Message is published");
+            client.end(); // Close the connection when published
+        });
+    });    
   });
 })
 
