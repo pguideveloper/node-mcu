@@ -17,6 +17,8 @@ var options = {
 
 const port = process.env.PORT || 8080
 
+var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
+
 app.set('views', path.join(__dirname, 'views'))
 app.set("view engine", "ejs")
 
@@ -25,7 +27,6 @@ app.get("/", (req, res) => {
 })
 
 app.get("/on", (req, res) => {
-  var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
   client.on('connect', function() { // When connected
     console.log('connected');
     // subscribe to a topic
