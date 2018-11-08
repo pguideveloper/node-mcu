@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 app.get("/on", (req, res) => {
 
   var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
-  
+
   client.on('connect', function() { // When connected
 
     console.log('connected');
@@ -38,8 +38,8 @@ app.get("/on", (req, res) => {
       console.log("Message is published");
       client.end(); // Close the connection when published
     });
-
-    res.send("Sucesso TURMINHA!")
+    
+    res.redirect("/")
   });
 })
 
