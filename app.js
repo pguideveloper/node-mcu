@@ -17,7 +17,7 @@ var options = {
 
 const port = process.env.PORT || 8080
 
-var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
+
 
 app.set('views', path.join(__dirname, 'views'))
 app.set("view engine", "ejs")
@@ -27,21 +27,17 @@ app.get("/", (req, res) => {
 })
 
 app.get("/on", (req, res) => {
-  client.on('connect', function() { // When connected
-    console.log('connected');
-    // subscribe to a topic
-    client.subscribe('message', function() {
-        // when a message arrives, do something with it
-        client.on('message', function(topic, message, packet) {
-            console.log("Received '" + message + "' on '" + topic + "'")
-        });
 
-        // publish a message to a topic
-        client.publish('message', 'IFSP teste', function() {
-            console.log("Message is published");
-            client.end(); // Close the connection when published
-        });
-    });    
+  var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
+  
+  client.on('connect', function() { // When connected
+
+    console.log('connected');
+
+    client.publish('message', 'IFSP teste', function() {
+      console.log("Message is published");
+      client.end(); // Close the connection when published
+    });
 
     res.send("Sucesso TURMINHA!")
   });
