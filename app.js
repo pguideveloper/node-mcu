@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
     res.render("teste")
 })
 
-app.get("/ligar", (req, res) => {
+app.get("/on", (req, res) => {
   // publish a message to a topic
   client.publish('action', 'on', function() {
     console.log("Message is published");
