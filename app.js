@@ -25,13 +25,14 @@ app.get("/", (req, res) => {
 })
 
 app.get("/on", (req, res) => {
+  var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options)
   client.on('connect', function() { // When connected
     console.log('connected');
     // subscribe to a topic
     client.subscribe('message', function() {
         // when a message arrives, do something with it
         client.on('message', function(topic, message, packet) {
-            console.log("Received '" + message + "' on '" + topic + "'");
+            console.log("Received '" + message + "' on '" + topic + "'")
         });
 
         // publish a message to a topic
