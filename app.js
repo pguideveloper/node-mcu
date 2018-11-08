@@ -5,6 +5,7 @@ const mqtt = require('mqtt')
 const client  = mqtt.connect('mqtt://test.mosquitto.org')
 
 client.on('connect', function (callback) {
+  console.log("teste")
   client.subscribe('presence', function (err) {
     if (!err) {
       client.publish('presence', 'Hello mqtt from IFSPCARAGUATAUBA')
