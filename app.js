@@ -15,6 +15,8 @@ var options = {
   encoding: 'utf8'
 };
 
+app.use(express.static('assets'));
+
 const port = process.env.PORT || 8080
 
 app.set('views', path.join(__dirname, 'views'))
