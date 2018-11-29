@@ -1,5 +1,52 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="assets/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/font-awesome.min.css">
+</head>
+<body>
+  <div class="container h-100" style="margin-top: 20px;">
+    <div class="row justify-content-center align-items-center">
+      <div class="card">
+        <video class="card-img-top" id="video" width="640" height="480" autoplay></video>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6 text-center">
+                <button class="btn btn-lg btn-primary" id="left">
+                  <h3> < </h3>
+                </button>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-6 text-center">
+              <button class="btn btn-lg btn-primary" id="right">
+                <h3> > </h3>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+</body>
+</html>
+
+<script src="assets/mqtt.js" type="text/javascript"></script>
+<script src="assets/jquery.min.js"></script>
+<script src="assets/bootstrap.min.js"></script>
+
+<script>
+  var video = document.getElementById('video');
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+  video.src = window.URL.createObjectURL(stream);
+  video.play();
+  });
+  }
+</script>
+
 <script>
 // Create a client instance
 client = new Paho.MQTT.Client("m15.cloudmqtt.com", 32131, 'mqttjs_' + Math.random().toString(16).substr(2, 8));
@@ -33,6 +80,31 @@ client = new Paho.MQTT.Client("m15.cloudmqtt.com", 32131, 'mqttjs_' + Math.rando
     client.send(message);
   });
   
+  var left = "-1"; 
+  var right = "1";
+  var timeOut = 0;
+
+  
+  $('#left').on('mousedown touchstart', function(e) {
+    timeOut = setInterval(function(){
+      message = new Paho.MQTT.Message(left);
+      message.destinationName = "message";
+      client.send(message);
+    }, 100);
+  }).bind('mouseup mouseleave touchend', function() {
+    clearInterval(timeOut);
+  });
+
+$('#right').on('mousedown touchstart', function(e) {
+  timeOut = setInterval(function(){
+      message = new Paho.MQTT.Message(right);
+      message.destinationName = "message";
+      client.send(message);
+    }, 100);
+  }).bind('mouseup mouseleave touchend', function() {
+    clearInterval(timeOut);
+  });
+
 
   function doFail(e){
     console.log(e);
