@@ -12,8 +12,15 @@
   <div class="container h-100" style="margin-top: 20px;">
     <div class="row justify-content-center align-items-center">
       <div class="card">
-        <video class="card-img-top" id="video" width="640" height="480" autoplay></video>
+        <video class="card-img-top" id="video" width="100%" height="480" autoplay style="transform: rotate(90deg)"></video>
         <div class="card-body">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <button class="btn btn-lg btn-primary" id="up">
+                    <h3> ^ </h3>
+                  </button>
+              </div>
+          </div>
           <div class="row">
             <div class="col-md-6 col-lg-6 col-sm-6 text-center">
                 <button class="btn btn-lg btn-primary" id="left">
@@ -23,6 +30,25 @@
             <div class="col-md-6 col-lg-6 col-sm-6 text-center">
               <button class="btn btn-lg btn-primary" id="right">
                 <h3> > </h3>
+              </button>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <button class="btn btn-lg btn-primary" id="down">
+                    <h3> v </h3>
+                  </button>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <button class="btn btn-lg btn-success" id="infra-ativar">
+                Ativar infra 
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-lg btn-danger" id="infra-desativar">
+                Desativar infra 
               </button>
             </div>
           </div>
@@ -80,15 +106,18 @@ client = new Paho.MQTT.Client("m15.cloudmqtt.com", 32131, 'mqttjs_' + Math.rando
     client.send(message);
   });
   
-  var left = "-1"; 
-  var right = "1";
+  var left  = "-2"; 
+  var right = "2";
+  var up    = "-2"; 
+  var down  = "2";
+
   var timeOut = 0;
 
   
   $('#left').on('mousedown touchstart', function(e) {
     timeOut = setInterval(function(){
       message = new Paho.MQTT.Message(left);
-      message.destinationName = "message";
+      message.destinationName = "x";
       client.send(message);
     }, 100);
   }).bind('mouseup mouseleave touchend', function() {
@@ -98,12 +127,45 @@ client = new Paho.MQTT.Client("m15.cloudmqtt.com", 32131, 'mqttjs_' + Math.rando
 $('#right').on('mousedown touchstart', function(e) {
   timeOut = setInterval(function(){
       message = new Paho.MQTT.Message(right);
-      message.destinationName = "message";
+      message.destinationName = "x";
       client.send(message);
     }, 100);
   }).bind('mouseup mouseleave touchend', function() {
     clearInterval(timeOut);
   });
+
+  $('#up').on('mousedown touchstart', function(e) {
+  timeOut = setInterval(function(){
+      message = new Paho.MQTT.Message(up);
+      message.destinationName = "y";
+      client.send(message);
+    }, 100);
+  }).bind('mouseup mouseleave touchend', function() {
+    clearInterval(timeOut);
+  });
+
+  $('#down').on('mousedown touchstart', function(e) {
+  timeOut = setInterval(function(){
+      message = new Paho.MQTT.Message(down);
+      message.destinationName = "y";
+      client.send(message);
+    }, 100);
+  }).bind('mouseup mouseleave touchend', function() {
+    clearInterval(timeOut);
+  });
+
+  $('#infra-ativar').on('click', function(e) {
+      message = new Paho.MQTT.Message("1");
+      message.destinationName = "message";
+      client.send(message);
+  });
+
+  $('#infra-desativar').on('click', function(e) {
+      message = new Paho.MQTT.Message("0");
+      message.destinationName = "infravermelho";
+      client.send(message);
+  });
+
 
 
   function doFail(e){
